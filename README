@@ -1,0 +1,12 @@
+#工程单独处理行情的配置文件，需要依赖相关的数据及文件，但不依赖行情的jar包，因为行情的maven配置比较不准确，依赖过多
+
+工程以main方法启动，
+定时任务
+数据库
+
+dynamicconfig_path
+boardconfig_path
+bindex_rtquotes_path
+tmp_path
+
+数据库配置
