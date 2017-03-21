@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
@@ -69,7 +70,7 @@ public class BoardDataSource {
     }
     
     public int updateBoardPrice(List<Map<String,Object>> list){
-	SqlSession session = sqlSessionFactory.openSession();
+	SqlSession session = sqlSessionFactory.openSession(ExecutorType.BATCH);
 	try {
 	    BoardMapper mapper = session.getMapper(BoardMapper.class);
 	    mapper.deleteBoardPrice();

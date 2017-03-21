@@ -118,6 +118,9 @@
 	</delete>
 	
 	<insert id="insertBoardPrice" >
-		insert into TEMP_DJSZS(tradingcode, closingprice) values (#stockcode#, #lastprice#)
+		insert into TEMP_DJSZS(tradingcode, closingprice) values
+		<foreach collection="list" item="item" separator=";">
+		(#{item.stockcode}, #{item.lastprice})
+		</foreach>
 	</insert>
 </mapper>

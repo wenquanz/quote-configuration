@@ -209,14 +209,16 @@ public class BoardConfigTask implements Runnable {
 		}
 
 	    }
-
+	    
 	    File file = new File(dynamicconfigPath);
-	    boolean isRenameSuccess = file.renameTo(new File(dynamicconfigPath
-		    + String.valueOf(System.currentTimeMillis())));
+	    String backupName = dynamicconfigPath
+		    + String.valueOf(System.currentTimeMillis());
+	    boolean isRenameSuccess = file.renameTo(new File(backupName));
 	    if (!isRenameSuccess) {
 		logger.error("failed to remane xml file ");
 		return;
 	    }
+	    logger.info("rename dynamicconfig.xml to " + backupName);
 	    Transformer xformer = TransformerFactory.newInstance()
 		    .newTransformer();
 	    xformer.setOutputProperty(OutputKeys.INDENT, "yes");
@@ -225,11 +227,11 @@ public class BoardConfigTask implements Runnable {
 		    "{http://xml.apache.org/xslt}indent-amount", "2");
 	    xformer.transform(new DOMSource(doc), new StreamResult(new File(
 		    dynamicconfigPath)));
-
+	    logger.info("write dynamicconfig.xml : ok");
 	    /**
 	     * 生成boardconfig.json
 	     */
-	    System.out.println("generate boardconfig.json");
+	    logger.info("generate boardconfig.json");
 	    BoardConfig config = JAXB.unmarshal(new File(dynamicconfigPath),
 		    BoardConfig.class);
 	    JsonConfig jsonConfig = new JsonConfig();

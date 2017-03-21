@@ -64,10 +64,12 @@ public class BoardPriceTask implements Runnable {
 		    list.add(map);
 		    currPosition += blockSize;
 		}
+		logger.info("read rtquotes.data : ok");
 		dis.close();
 		
 		// update
 		boardDataSource.updateBoardPrice(list);
+		logger.info("insert board lastprice : ok ");
 	    }
 	} catch (Exception e) {
 	    logger.error(e.toString(),e);
