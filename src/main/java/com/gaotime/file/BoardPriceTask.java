@@ -2,6 +2,8 @@ package com.gaotime.file;
 
 import java.io.DataInputStream;
 import java.io.RandomAccessFile;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,6 +25,8 @@ public class BoardPriceTask implements Runnable {
     private BoardDataSource boardDataSource;
 
     private String bindexRtquotesPath;
+
+    private DecimalFormat df = new DecimalFormat("#.00");
 
     private int headSize = 32;
     private int blockSize = 2048;
@@ -55,10 +59,17 @@ public class BoardPriceTask implements Runnable {
 		int count = (int) (len % blockSize == 0 ? len / blockSize : len
 			/ blockSize + 1);
 		Map<String, Object> map = null;
+		logger.info("read rtquotes.data");
 		for (int i = 0; i < count; i++) {
 		    map = new HashMap<String, Object>();
-		    bra.seek(currPosition+2);
-		    map.put("lastprice", dis.readDouble());
+		    bra.seek(currPosition + 2);
+		    Double lastprice = dis.readDouble();
+		    
+		    if(lastprice > 0){
+			map.put("lastprice", df.format(lastprice));
+		    }else{
+			map.put("lastprice", "1000");
+		    }
 		    bra.seek(currPosition + 391);
 		    map.put("stockcode", dis.readUTF());
 		    list.add(map);
@@ -66,13 +77,15 @@ public class BoardPriceTask implements Runnable {
 		}
 		logger.info("read rtquotes.data : ok");
 		dis.close();
-		
+
 		// update
 		boardDataSource.updateBoardPrice(list);
 		logger.info("insert board lastprice : ok ");
+	    }else{
+		logger.error("rtquotes is empty");
 	    }
 	} catch (Exception e) {
-	    logger.error(e.toString(),e);
+	    logger.error(e.toString(), e);
 	}
     }
 

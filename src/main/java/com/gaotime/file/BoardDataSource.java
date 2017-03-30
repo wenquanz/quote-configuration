@@ -74,7 +74,12 @@ public class BoardDataSource {
 	try {
 	    BoardMapper mapper = session.getMapper(BoardMapper.class);
 	    mapper.deleteBoardPrice();
-	    return mapper.insertBoardPrice(list);
+	    for(Map<String,Object> map : list){
+		mapper.insertBoardPrice(map);
+		session.flushStatements();
+	    }
+	    session.commit();
+	    return 0;
 	} finally {
 	  session.close();
 	}

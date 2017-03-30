@@ -15,5 +15,5 @@ public interface BoardMapper {
     
     public int deleteBoardPrice();
 
-    public int insertBoardPrice(List<Map<String,Object>> list);
+    public int insertBoardPrice(Map<String,Object> list);
 }

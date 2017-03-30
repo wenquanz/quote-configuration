@@ -117,10 +117,9 @@
 		delete from TEMP_DJSZS
 	</delete>
 	
-	<insert id="insertBoardPrice" >
-		insert into TEMP_DJSZS(tradingcode, closingprice) values
-		<foreach collection="list" item="item" separator=";">
-		(#{item.stockcode}, #{item.lastprice})
-		</foreach>
+	<insert id="insertBoardPrice">
+		insert into TEMP_DJSZS(tradingcode, closingprice) 
+		values
+		(#{stockcode, jdbcType=VARCHAR}, #{lastprice, jdbcType=NUMERIC})
 	</insert>
 </mapper>
